@@ -6,7 +6,8 @@ bac <- readLines("data/raw/bacdive-microa/bacdive-microa.csv")
 
 # bac <- c(t(bac))
 bac <- bac[bac != ""]
-bac <- gsub("\"", "", bac)
+bac <- iconv(bac, from = "latin1", to = "UTF-8") # convert latin1 to UTF-8
+bac <- gsub("\"", "", bac) 
 bac <- gsub("DSM [1-9]|[0-9]|KCTC|CIP|CCUG|LMG|JCM|NCTC|NCDO|ATCC [A-Z]*|攼㸹", "", bac) 
 bac <- unlist(strsplit(bac, ";"))
 # bac <- bac[nchar(bac) > 10]
