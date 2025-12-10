@@ -11,6 +11,14 @@ bac <- gsub("\"", "", bac)
 bac <- gsub("DSM [1-9]|[0-9]|KCTC|CIP|CCUG|LMG|JCM|NCTC|NCDO|ATCC [A-Z]*|攼㸹", "", bac) 
 bac <- unlist(strsplit(bac, ";"))
 # bac <- bac[nchar(bac) > 10]
+  # why was this commented out? 
+  # Quick scroll through bac shows no bacterial names <10
+  # by commenting out nchar filter we keep the following: 
+  # NY microaerophilic 2 5116 type material (chestnut blight fungus?)
+  # SL microaerophilic 2 1490994 SL type material (another fungus)
+  # Paris microaerophilic 5 49669 scientific name (A PLANT?)
+# recommendation: bac <- bac[nchar(bac) >= 10]
+
 bac <- unique(bac)
 
 # Add metabolism
