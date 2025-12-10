@@ -11,13 +11,30 @@ source("R/settings.R")
 
 # Retrieve large files not in the GitHub repo
 if (!file.exists("output/taxonomy/taxonomy_names.csv")) {
-  download.file(url="https://ndownloader.figshare.com/files/14875220?private_link=ab40d2a35266d729698c", destfile = "output/taxonomy/taxonomy_names.csv")
+  download.file(url="https://ndownloader.figshare.com/files/14875220?private_link=ab40d2a35266d729698c", 
+                destfile = "output/taxonomy/taxonomy_names.csv")
 }
-
 
 if (!file.exists("data/raw/patric/genome_metadata.txt")) {
-  download.file(url="ftp://ftp.bvbrc.org/RELEASE_NOTES/genome_metadata", destfile = "data/raw/patric/genome_metadata.txt")
+  download.file(url="ftp://ftp.bv-brc.org/RELEASE_NOTES/genome_metadata", 
+                destfile = "data/raw/patric/genome_metadata.txt",
+                method = "curl",
+                extra = c("--ssl-reqd"))
 }
+
+# ^ THIS ORIGINALLY WAS A BROKEN FTP SERVER LINK
+# BV-BRC moved to FTPS not FTP server!! 
+# changes: 
+#   URL: bv-brc instead of bvbrc
+#   method = "curl" 
+#   extra = c("--ssl-reqd")) 
+# explanation: 
+#   use "ftp://ftp" so that the implicit ftps 990 channel isn't used by curl
+#   add --ssl-req to explicitly require ftps 
+
+# README says the file is large ~ 140 MB, this is >500 MB now
+# also mentioned in the "README" that the file is on figshare?? 
+# Is that just for the original file from the paper we are repeating? 
 
 # Load raw NCBI taxonomy table if not already loaded; takes a while but only done once
 if(!exists('nam') || !is.data.frame(get('nam'))) {
