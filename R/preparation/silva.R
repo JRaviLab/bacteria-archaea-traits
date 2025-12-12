@@ -1,6 +1,8 @@
 # Silva data preparation
 # Source of growth rates
 
+library(stringr) # replace gsub, robust to latin1
+
 # Open original dataset
 sil <- read.csv("data/raw/silva/data_silva_DN070917.csv", as.is=TRUE)
 
@@ -20,7 +22,8 @@ sil$DN_ref_fulltext <- NA
 # for the given organism
 
 #Remove brackets from reference ids 
-sil$Vieira.Silva_d_reference <- gsub("\\[|\\]", "", sil$Vieira.Silva_d_reference)
+sil$Vieira.Silva_d_reference <- stringr::str_replace_all(
+  sil$Vieira.Silva_d_reference, "\\[|\\]", "")
 sil$Vieira.Silva_d_reference <- as.integer(sil$Vieira.Silva_d_reference)
 
 sil$DN_new_ref <- gsub("\\[|\\]", "", sil$DN_new_ref)
@@ -35,7 +38,8 @@ sil_refs$id <- str_extract(sil_refs$full_text, "[^\\.]+")
 sil_refs$id <- as.integer(sil_refs$id)
 
 #Remove reference id from main string
-sil_refs$full_text <- gsub("^.*?\\.","",sil_refs$full_text)
+sil_refs$full_text <- stringr::str_replace_all(sil_refs$full_text, 
+                                               "^.*?\\.","")
 
 #Merge reference into main data frame
 sil <- sil %>% left_join(sil_refs, by = c("Vieira.Silva_d_reference" = "id"))
