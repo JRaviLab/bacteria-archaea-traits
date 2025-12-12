@@ -90,55 +90,55 @@ gol$d1_unit[grep(cm, gol$CELL_DIAMETER)] <- "cm"
 gol$d2_unit[grep(cm, gol$CELL_LENGTH)] <- "cm"
 
 # Strip out units
-gol$d1 <- gsub(um, "", gol$CELL_DIAMETER)
-gol$d1 <- gsub(nm, "", gol$d1)
-gol$d1 <- gsub(mm, "", gol$d1)
-gol$d1 <- gsub(cm, "", gol$d1)
+gol$d1 <- str_replace_all(gol$CELL_DIAMETER, um, "")
+gol$d1 <- str_replace_all(gol$d1, nm, "")
+gol$d1 <- str_replace_all(gol$d1, mm, "")
+gol$d1 <- str_replace_all(gol$d1, cm, "")
 
-gol$d2 <- gsub(um, "", gol$CELL_LENGTH)
-gol$d2 <- gsub(nm, "", gol$d2)
-gol$d2 <- gsub(mm, "", gol$d2)
-gol$d2 <- gsub(cm, "", gol$d2)
-gol$d2 <- gsub("variable", NA, gol$d2)
-gol$d2 <- gsub("in length", "", gol$d2)
+gol$d2 <- str_replace_all(gol$CELL_LENGTH, um, "")
+gol$d2 <- str_replace_all(gol$d2, nm, "")
+gol$d2 <- str_replace_all(gol$d2, mm, "")
+gol$d2 <- str_replace_all(gol$d2, cm, "")
+gol$d2 <- str_replace_all(gol$d2, "variable", NA_character_)
+gol$d2 <- str_replace_all(gol$d2, "in length", "")
 
 # Strip out space, fix decimals and dashes
-gol$d1 <- gsub(sp, "", gol$d1)
-gol$d1 <- gsub(dc, ".", gol$d1)
-gol$d1 <- gsub(dh, "-", gol$d1)
+gol$d1 <- str_replace_all(gol$d1, sp, "")
+gol$d1 <- str_replace_all(gol$d1, dc, ".")
+gol$d1 <- str_replace_all(gol$d1, dh, "-")
 
-gol$d2 <- gsub(sp, "", gol$d2)
-gol$d2 <- gsub(dc, ".", gol$d2)
-gol$d2 <- gsub(dh, "-", gol$d2)
+gol$d2 <- str_replace_all(gol$d2, sp, "")
+gol$d2 <- str_replace_all(gol$d2, dc, ".")
+gol$d2 <- str_replace_all(gol$d2, dh, "-")
 
 # Remove leading characters
-gol$d1 <- gsub("(-|s|\\.)$", "", gol$d1)
-gol$d2 <- gsub("(-|s|\\.)$", "", gol$d2)
+gol$d1 <- str_replace_all(gol$d1, "(-|s|\\.)$", "")
+gol$d2 <- str_replace_all(gol$d2, "(-|s|\\.)$", "")
 
 # Hard fixes (because there's no logic to fix otherwise...)
-gol$d1 <- gsub("(0¿8-1¿0 )", "0.8-1.0", gol$d1)
-gol$d1 <- gsub("(0.4\\+/-0.1)", "0.3-0.5", gol$d1)
-gol$d1 <- gsub("0-8-1-0", "0.8-1.0", gol$d1)
+gol$d1 <- str_replace_all(gol$d1, "(0¿8-1¿0 )", "0.8-1.0")
+gol$d1 <- str_replace_all(gol$d1, "(0.4\\+/-0.1)", "0.3-0.5")
+gol$d1 <- str_replace_all(gol$d1, "0-8-1-0", "0.8-1.0")
 
-gol$d2 <- gsub("(1.2\\+/-0.4)", "0.8-1.6", gol$d2)
-gol$d2 <- gsub("(0.8  1.2)", "0.8-1.2", gol$d2)
-gol$d2 <- gsub("I", "1", gol$d2)
-gol$d2 <- gsub("(1.5-.5.0)", "1.5-5.0", gol$d2)
+gol$d2 <- str_replace_all(gol$d2, "(1.2\\+/-0.4)", "0.8-1.6")
+gol$d2 <- str_replace_all(gol$d2, "(0.8  1.2)", "0.8-1.2")
+gol$d2 <- str_replace_all(gol$d2, "I", "1")
+gol$d2 <- str_replace_all(gol$d2, "(1.5-.5.0)", "1.5-5.0")
 
 #DN ADDED..
-gol$d1 <- gsub("(0Â-8-1Â-0)", "0.8-1.0", gol$d1)
-gol$d1 <- gsub("(2.0Â-Â-2.5)", "2.0-2.5", gol$d1)
-gol$d1 <- gsub("(0.3-0.6Â-Â)", "0.3-0.6", gol$d1)
+gol$d1 <- str_replace_all(gol$d1, "(0Â-8-1Â-0)", "0.8-1.0")
+gol$d1 <- str_replace_all(gol$d1, "(2.0Â-Â-2.5)", "2.0-2.5")
+gol$d1 <- str_replace_all(gol$d1, "(0.3-0.6Â-Â)", "0.3-0.6")
 
-gol$d2 <- gsub("(1-4Â-Â)", "1-4", gol$d2)
-gol$d2 <- gsub("(2.5Â-Â-3.2)", "2.5-3.2", gol$d2)
+gol$d2 <- str_replace_all(gol$d2, "(1-4Â-Â)", "1-4")
+gol$d2 <- str_replace_all(gol$d2, "(2.5Â-Â-3.2)", "2.5-3.2")
 
 #Remove remaining Â and Î¼m
-gol$d1 <- gsub("Â", "", gol$d1)
-gol$d1 <- gsub("Î¼m", "", gol$d1)
+gol$d1 <- str_replace_all(gol$d1, "Â", "")
+gol$d1 <- str_replace_all(gol$d1, "Î¼m", "")
 
-gol$d2 <- gsub("Â", "", gol$d2)
-gol$d2 <- gsub("Î¼m", "", gol$d2)
+gol$d2 <- str_replace_all(gol$d2, "Â", "")
+gol$d2 <- str_replace_all(gol$d2, "Î¼m", "")
 
 # gol[c("d1", "d1_unit")][!is.na(gol$d1),]
 # gol[c("d2", "d2_unit")][!is.na(gol$d2),]
@@ -255,47 +255,49 @@ rm(d1,d2)
 # Since these data represents temperature optima, it seems reasonable to get the mean of any range
 
 #Remove any words
-gol$TEMPERATURE_OPTIMUM <- gsub("degrees celsius", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("degree celcius", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("degree Celcius", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("degrees C", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("celsius", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("Celcius", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("Celsius", "", gol$TEMPERATURE_OPTIMUM)
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM, "degrees celsius", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM, "degree celcius", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"degree Celcius", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"degrees C", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"celsius", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"Celcius", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"Celsius", "")
 
-gol$TEMPERATURE_OPTIMUM <- gsub("deg", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub(" - Q188620", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub(" - Q188620", "", gol$TEMPERATURE_OPTIMUM)
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"deg", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM," - Q188620", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM," - Q188620", "")
 
 gol$TEMPERATURE_OPTIMUM[gol$TEMPERATURE_OPTIMUM == "Thermophile"] <- NA
 gol$TEMPERATURE_OPTIMUM[gol$TEMPERATURE_OPTIMUM == "Hyperthermophile"] <- NA
 gol$TEMPERATURE_OPTIMUM[gol$TEMPERATURE_OPTIMUM == "Mesphile"] <- NA
 gol$TEMPERATURE_OPTIMUM[gol$TEMPERATURE_OPTIMUM == "Mesophile"] <- NA
 
-gol$TEMPERATURE_OPTIMUM <- gsub("Â¿Â¿", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("Â¿", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("Â°C", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("â€“", "-", gol$TEMPERATURE_OPTIMUM)
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"Â¿Â¿", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"Â¿", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"Â°C", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"â€“", "-")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"–", "-") # added cuz wasn't fixed
 
 gol$TEMPERATURE_OPTIMUM[gol$TEMPERATURE_OPTIMUM == "2025"] <- "20-25"
 gol$TEMPERATURE_OPTIMUM[gol$TEMPERATURE_OPTIMUM == "20?25 ?C"] <- "20-25"
 
 #Remove various letters and symbols
-gol$TEMPERATURE_OPTIMUM <- gsub("oC", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("C", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("c", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub("?", "", gol$TEMPERATURE_OPTIMUM, fixed = TRUE) #Important to remove all ?
-gol$TEMPERATURE_OPTIMUM <- gsub("°", "", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub(" ", "", gol$TEMPERATURE_OPTIMUM, fixed = TRUE) #Important to remove all " "
-gol$TEMPERATURE_OPTIMUM <- gsub("to", "-", gol$TEMPERATURE_OPTIMUM)
-gol$TEMPERATURE_OPTIMUM <- gsub(",", "-", gol$TEMPERATURE_OPTIMUM)
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"oC", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"C", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"c", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM, fixed("?"), "") #Important to remove all ?
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM, fixed("¿"), "") # added because it wasn't removed
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"°", "")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,fixed(" "), "") #Important to remove all " "
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"to", "-")
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,",", "-")
 
 gol$TEMPERATURE_OPTIMUM[gol$TEMPERATURE_OPTIMUM == "2025"] <- "20-25"
 
 #Trim all white space
 gol$TEMPERATURE_OPTIMUM <- trimws(gol$TEMPERATURE_OPTIMUM)
 #Remove any extra space between words
-gol$TEMPERATURE_OPTIMUM <- gsub("\\s+"," ",gol$TEMPERATURE_OPTIMUM)
+gol$TEMPERATURE_OPTIMUM <- str_replace_all(gol$TEMPERATURE_OPTIMUM,"\\s+"," ")
 
 # Create new row for average optimum temperature values
 gol$optimum_tmp <- NA
