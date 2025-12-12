@@ -36,7 +36,9 @@ rm_genus <- function(x) {
 fie$Species <- apply(fie["Species"], 1, rm_genus)
 
 # Fix inconsistencies in rRNA16S
-fie$rRNA16S <- trimws(gsub(",", "", fie$rRNA16S))
+# Kat: error when running do to special characters "B326358_\xd1\xd0"
+# using stringr::str_replace_all fixes this
+fie$rRNA16S <- trimws(stringr::str_replace_all(fie$rRNA16S, ",", ""))
 
 #Some species names are listed with a capital - force to lower case
 fie$Species <- tolower(fie$Species)
@@ -45,7 +47,7 @@ fie$Species <- tolower(fie$Species)
 fie$Genus <- paste(toupper(substr(fie$Genus, 1, 1)), substr(fie$Genus, 2, nchar(fie$Genus)), sep="")
 
 #Combine clean genus and species names into full name
-fie$org_name <- paste(trimws(fie$Genus), trimws(fie$Species))
+fie$org_name <- paste(stringr::str_trim(fie$Genus), stringr::str_trim(fie$Species))
 
 #update column names to standard for merger
 colnames(fie)[which(names(fie) == "Oxygen")] <- "metabolism"
@@ -147,31 +149,33 @@ fie$Length[fie$tax_id == 1229268 & fie$Length == 2500] <- 2.5
 fie$Width[fie$tax_id == 1229268 & fie$Width == 3500] <- 0.35
 
 # Clean up size data (errors from excel date and number conversions)
-fie$d1 <- gsub("_\xd1\xd0", "-", fie$Width)
-fie$d2 <- gsub("_\xd1\xd0", "-", fie$Length)
+fie$d1 <- stringr::str_replace_all(fie$Width, "_\xd1\xd0", "-")
+fie$d2 <- stringr::str_replace_all(fie$Length, "_\xd1\xd0", "-")
 
-rm <- "(not indicated, )|(not indicated, diameter = )|(not indicated )|(Filament width of )|(diameter: )|( in diameter)|( \\(diameter\\))"
+# changed order of rm to have longer string first
+# otherwise stringr takes 1st match
+rm <- "(not indicated, diameter =)|(not indicated, )|(not indicated )|(Filament width of )|(diameter: )|( in diameter)|( \\(diameter\\))"
 
-fie$d1 <- gsub(rm, " ", fie$d1)
-fie$d2 <- gsub(rm, " ", fie$d2)
+fie$d1 <- stringr::str_replace_all(fie$d1, rm, " ")
+fie$d2 <- stringr::str_replace_all(fie$d2, rm, " ")
 
 # Remove any remaining parenthesis and < > signs (we ignore when size is indicated as smaller than "<" or larger than ">")
 # This can be done with a single regex, but for now we do it the coarse way
 
-fie$d1 <- gsub("\\(","", fie$d1)
-fie$d1 <- gsub("\\)","", fie$d1)
-fie$d1 <- gsub(">","", fie$d1)
-fie$d1 <- gsub("<","", fie$d1)
+fie$d1 <- stringr::str_replace_all(fie$d1, "\\(","")
+fie$d1 <- stringr::str_replace_all(fie$d1, "\\)","")
+fie$d1 <- stringr::str_replace_all(fie$d1, ">","")
+fie$d1 <- stringr::str_replace_all(fie$d1, "<","")
 
-fie$d2 <- gsub("\\(","", fie$d2)
-fie$d2 <- gsub("\\)","", fie$d2)
-fie$d2 <- gsub(">","", fie$d2)
-fie$d2 <- gsub("<","", fie$d2)
+fie$d2 <- stringr::str_replace_all(fie$d2, "\\(","")
+fie$d2 <- stringr::str_replace_all(fie$d2, "\\)","")
+fie$d2 <- stringr::str_replace_all(fie$d2, ">","")
+fie$d2 <- stringr::str_replace_all(fie$d2, "<","")
 
 #Replace "," with "." : Some numbers have been input using comma
 
-fie$d1 <- gsub(",", ".", fie$d1)
-fie$d2 <- gsub(",", ".", fie$d2)
+fie$d1 <- stringr::str_replace_all(fie$d1, ",", ".")
+fie$d2 <- stringr::str_replace_all(fie$d2, ",", ".")
 
 ##  Split d1 and d2 ranges into lower and upper values (and deal with excel dates)
 
