@@ -36,8 +36,12 @@ cols <- c("taxon_id",
 pat2 <- subset(pat, select=cols)
 
 # Remove genome data where genome status is not complete
+# And complete genomes with complete sequencing
 # This way we are only calculating genome length from complete genomes 
-pat2$genome_length[is.na(pat2$genome_status) | pat2$genome_status != "Complete"] <- NA
+pat2$genome_length[is.na(pat2$genome_status) | 
+                     pat2$genome_status != "Complete"] <- NA
+pat2$genome_length[is.na(pat2$sequencing_status) | 
+                     tolower(pat2$sequencing_status) != "complete"] <- NA
 
 #Remove all genome data where sequencing depth < recommended
 #Clean up column from text
