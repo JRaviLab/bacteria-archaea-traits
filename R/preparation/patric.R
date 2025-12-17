@@ -35,11 +35,9 @@ cols <- c("taxon_id",
 
 pat2 <- subset(pat, select=cols)
 
-#Remove genome data where status = Plasmid
-pat2$genome_length[pat2$genome_status == "Plasmid"] <- NA
-
-#Remove genome data where sequencing_status is NOT complete or finished
-pat2$genome_length[grepl("assembly|unfinished|in progress",pat2$sequencing_status)] <- NA
+# Remove genome data where genome status is not complete
+# This way we are only calculating genome length from complete genomes 
+pat2$genome_length[is.na(pat2$genome_status) | pat2$genome_status != "Complete"] <- NA
 
 #Remove all genome data where sequencing depth < recommended
 #Clean up column from text
