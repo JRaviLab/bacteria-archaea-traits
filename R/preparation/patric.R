@@ -36,12 +36,9 @@ cols <- c("taxon_id",
 pat2 <- subset(pat, select=cols)
 
 # Remove genome data where genome status is not complete
-# And complete genomes with complete sequencing
 # This way we are only calculating genome length from complete genomes 
 pat2$genome_length[is.na(pat2$genome_status) | 
                      pat2$genome_status != "Complete"] <- NA
-pat2$genome_length[is.na(pat2$sequencing_status) | 
-                     tolower(pat2$sequencing_status) != "complete"] <- NA
 
 #Remove all genome data where sequencing depth < recommended
 #Clean up column from text
@@ -49,9 +46,7 @@ pat2$sequencing_depth <- gsub("approximately|approx.|fold|ND|n.d|about|Unknown|u
 pat2$sequencing_depth <- gsub(".*complete:\\s*|coverage.*", "", pat2$sequencing_depth)
 pat2$sequencing_depth <- gsub(".*complete :", "", pat2$sequencing_depth)
 pat2$sequencing_depth <- as.numeric(pat2$sequencing_depth)
-
-#This removes just under 5000 data points out of 130,000
-pat2$genome_length[pat2$sequencing_depth < 10] <- NA
+pat2$genome_length[pat2$sequencing_depth < 10] <- NA # this does not handle NAs
 
 # Remove negative genome lengths as well as anything below
 # the smallest known genome (2018 ~ 0.58Mb)
