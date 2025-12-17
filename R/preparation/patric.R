@@ -68,7 +68,8 @@ pat2 <- pat2[!grepl("SCGC",pat2$genome_name),]
 #These are metagenome assembled genomes and are often much smaller than real genomes
 # Removes 5 complete genomes (2025-12-17)
 pat2 <- pat2[!is.na(pat2$genome_name) & !grepl("MAG-", pat2$genome_name),]
-# Remove metagenomes in the isolation source as well 
+# Remove metagenomes in the isolation source as well
+# Removes 30 Complete genomes (2025-12-17)
 pat2 <- pat2[!grepl("metagenome",pat2$isolation_source),]
 ##
 
