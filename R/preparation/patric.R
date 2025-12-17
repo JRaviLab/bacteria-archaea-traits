@@ -57,15 +57,19 @@ pat2$genome_length[pat2$genome_length <= 550000] <- NA
 ## REMOVE SAGs AND MAGs
 
 #Remove rows where isolation source contains the term "single cell"
-#These are essentially SAGs, and while they may be OK, many have too short genome length (not fully sequenced) (678 in total)
+#These are essentially SAGs, and while they may be OK, many have too short genome length (not fully sequenced)
+# Removes 14 Complete genomes (2025-12-17)
 pat2 <- pat2[!grepl("single cell",pat2$isolation_source),]
 #Remove genome size data from organisms with "SCGC" in their  name - these are single cell genomes
+# Removes 0 Complete genomes (2025-12-17)
 pat2 <- pat2[!grepl("SCGC",pat2$genome_name),]
 
 #Remove all where species name contains the word "MAG-" 
 #These are metagenome assembled genomes and are often much smaller than real genomes
+# Removes 5 complete genomes (2025-12-17)
 pat2 <- pat2[!is.na(pat2$genome_name) & !grepl("MAG-", pat2$genome_name),]
-
+# Remove metagenomes in the isolation source as well 
+pat2 <- pat2[!grepl("metagenome",pat2$isolation_source),]
 ##
 
 #Remove nonsense words from motility
