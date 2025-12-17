@@ -80,7 +80,7 @@ pat2$motility[pat2$motility == "mesophile"] <- NA
 pat2$sporulation[pat2$sporulation == "Motile"] <- NA
 
 #Remove nonsense words from cell shape
-pat2$cell_shape[pat2$cell_shape == "ARRAY(0x4ee9450)"] <- NA
+pat2$cell_shape[stringr::str_detect(pat2$cell_shape, "ARRAY(")] <- NA
 
 #Clean html from cell shapes
 pat2$cell_shape[!is.na(pat2$cell_shape)] <- apply(pat2[!is.na(pat2$cell_shape),"cell_shape"], 1, trimHtml)
