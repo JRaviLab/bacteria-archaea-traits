@@ -19,7 +19,7 @@ CONSTANT_EXCLUDED_DATASETS <- c("bergeys.csv")
 # we will not prepare datasets that have not been updated
 # other datasets will use the madin prepared datasets
 CONSTANT_PREPARE_DATASETS <- c("pasteur", "patric", "rrndb", "faprotax", 
-                               "genbank", "metanogen")
+                               "metanogen")
 
 #CONSTANT_PREPARE_DATASETS <- c("amend-shock","bacdive-microa","campedelli","corkrey","edwards","engqvist","faprotax","fierer","genbank","gold","jemma-refseq",
                                #"kegg","kremer","masonmm","mediadb","metanogen","microbe-directory","nielsensl","pasteur","patric",
