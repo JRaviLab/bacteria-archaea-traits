@@ -118,17 +118,17 @@ pat2$temperature_range[pat2$temperature_range == "30 - 72 C"] <- "Mesophilic"
 # Fix optimal temperature
 
 #Remove all "C" from values
+pat2$optimal_temperature <- gsub("oC", "", pat2$optimal_temperature, fixed = TRUE)
 pat2$optimal_temperature <- gsub("C","",pat2$optimal_temperature, fixed = TRUE)
 pat2$optimal_temperature <- gsub(" ","",pat2$optimal_temperature, fixed = TRUE)
 pat2$optimal_temperature <- gsub("<","",pat2$optimal_temperature, fixed = TRUE)
 pat2$optimal_temperature <- gsub("~","-",pat2$optimal_temperature, fixed = TRUE)
 pat2$optimal_temperature <- gsub("to","-",pat2$optimal_temperature, fixed = TRUE)
-pat2$optimal_temperature <- gsub("o", "", pat2$optimal_temperature, fixed = TRUE)
 
 #Fix specific issues
 pat2$optimal_temperature[pat2$optimal_temperature == "25-32(28)"] <- "25-32"
 pat2$optimal_temperature[pat2$optimal_temperature == "25-35(26)"] <- "25-35"
-pat2$optimal_temperature[pat2$optimal_temperature == "\"Human,Hmsapiens\""] <- NA
+pat2$optimal_temperature[pat2$optimal_temperature == "\"Human,Homosapiens\""] <- NA
 pat2$optimal_temperature[pat2$optimal_temperature == "F"] <- NA
 pat2$optimal_temperature[pat2$optimal_temperature == "-"] <- NA
 pat2$optimal_temperature[pat2$optimal_temperature == ""] <- NA
