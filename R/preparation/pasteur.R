@@ -16,7 +16,8 @@ names(pas2) <- c("org_name","isolation_source","metabolism")
 pas3 <- pas2 %>% distinct(org_name,isolation_source,metabolism)
 
 #At this point we only include oxygen requirement, so exclude canophiles where no information on oxygen use is included
-pas4 <- pas3 %>% filter(metabolism %in% c("Aerobic","Anaerobic","Microaerophilic"))
+pas4 <- pas3 %>% filter(metabolism %in% c("Aerobic","Anaerobic",
+                                          "Microaerophilic", "Strictly anaerobic"))
 
 issues <- c("Surface of Beaufort, G",
             "Surface rind of Beaufort, G",

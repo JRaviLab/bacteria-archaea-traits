@@ -35,11 +35,10 @@ cols <- c("taxon_id",
 
 pat2 <- subset(pat, select=cols)
 
-#Remove genome data where status = Plasmid
-pat2$genome_length[pat2$genome_status == "Plasmid"] <- NA
-
-#Remove genome data where sequencing_status is NOT complete or finished
-pat2$genome_length[grepl("assembly|unfinished|in progress",pat2$sequencing_status)] <- NA
+# Remove genome data where genome status is not complete
+# This way we are only calculating genome length from complete genomes 
+pat2$genome_length[is.na(pat2$genome_status) | 
+                     pat2$genome_status != "Complete"] <- NA
 
 #Remove all genome data where sequencing depth < recommended
 #Clean up column from text
@@ -47,9 +46,7 @@ pat2$sequencing_depth <- gsub("approximately|approx.|fold|ND|n.d|about|Unknown|u
 pat2$sequencing_depth <- gsub(".*complete:\\s*|coverage.*", "", pat2$sequencing_depth)
 pat2$sequencing_depth <- gsub(".*complete :", "", pat2$sequencing_depth)
 pat2$sequencing_depth <- as.numeric(pat2$sequencing_depth)
-
-#This removes just under 5000 data points out of 130,000
-pat2$genome_length[pat2$sequencing_depth < 10] <- NA
+pat2$genome_length[pat2$sequencing_depth < 10] <- NA # this does not handle NAs
 
 # Remove negative genome lengths as well as anything below
 # the smallest known genome (2018 ~ 0.58Mb)
@@ -60,15 +57,20 @@ pat2$genome_length[pat2$genome_length <= 550000] <- NA
 ## REMOVE SAGs AND MAGs
 
 #Remove rows where isolation source contains the term "single cell"
-#These are essentially SAGs, and while they may be OK, many have too short genome length (not fully sequenced) (678 in total)
+#These are essentially SAGs, and while they may be OK, many have too short genome length (not fully sequenced)
+# Removes 14 Complete genomes (2025-12-17)
 pat2 <- pat2[!grepl("single cell",pat2$isolation_source),]
 #Remove genome size data from organisms with "SCGC" in their  name - these are single cell genomes
+# Removes 0 Complete genomes (2025-12-17)
 pat2 <- pat2[!grepl("SCGC",pat2$genome_name),]
 
 #Remove all where species name contains the word "MAG-" 
 #These are metagenome assembled genomes and are often much smaller than real genomes
+# Removes 5 complete genomes (2025-12-17)
 pat2 <- pat2[!is.na(pat2$genome_name) & !grepl("MAG-", pat2$genome_name),]
-
+# Remove metagenomes in the isolation source as well
+# Removes 30 Complete genomes (2025-12-17)
+pat2 <- pat2[!grepl("metagenome",pat2$isolation_source),]
 ##
 
 #Remove nonsense words from motility
@@ -78,7 +80,7 @@ pat2$motility[pat2$motility == "mesophile"] <- NA
 pat2$sporulation[pat2$sporulation == "Motile"] <- NA
 
 #Remove nonsense words from cell shape
-pat2$cell_shape[pat2$cell_shape == "ARRAY(0x4ee9450)"] <- NA
+pat2$cell_shape[stringr::str_detect(pat2$cell_shape, "ARRAY")] <- NA
 
 #Clean html from cell shapes
 pat2$cell_shape[!is.na(pat2$cell_shape)] <- apply(pat2[!is.na(pat2$cell_shape),"cell_shape"], 1, trimHtml)
@@ -116,6 +118,7 @@ pat2$temperature_range[pat2$temperature_range == "30 - 72 C"] <- "Mesophilic"
 # Fix optimal temperature
 
 #Remove all "C" from values
+pat2$optimal_temperature <- gsub("oC", "", pat2$optimal_temperature, fixed = TRUE)
 pat2$optimal_temperature <- gsub("C","",pat2$optimal_temperature, fixed = TRUE)
 pat2$optimal_temperature <- gsub(" ","",pat2$optimal_temperature, fixed = TRUE)
 pat2$optimal_temperature <- gsub("<","",pat2$optimal_temperature, fixed = TRUE)

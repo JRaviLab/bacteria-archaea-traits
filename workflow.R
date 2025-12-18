@@ -16,7 +16,10 @@ if (!file.exists("output/taxonomy/taxonomy_names.csv")) {
 
 
 if (!file.exists("data/raw/patric/genome_metadata.txt")) {
-  download.file(url="ftp://ftp.bvbrc.org/RELEASE_NOTES/genome_metadata", destfile = "data/raw/patric/genome_metadata.txt")
+  download.file(url="ftp://ftp.bv-brc.org/RELEASE_NOTES/genome_metadata", 
+                destfile = "data/raw/patric/genome_metadata.txt",
+                method = "curl",
+                extra = c("--ssl-reqd"))
 }
 
 # Load raw NCBI taxonomy table if not already loaded; takes a while but only done once
