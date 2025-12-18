@@ -15,13 +15,9 @@ names(pas2) <- c("org_name","isolation_source","metabolism")
 #Only keep unique combitions of the three columns
 pas3 <- pas2 %>% distinct(org_name,isolation_source,metabolism)
 
-# Rename "Strictly anaerobic" to "Anaerobic" 
-pas3$metabolism <- pas3$metabolism %>% 
-  str_replace_all("Strictly anaerobic", "Anaerobic")
-
 #At this point we only include oxygen requirement, so exclude canophiles where no information on oxygen use is included
-pas4 <- pas3 %>% filter(metabolism %in% c("Aerobic","Anaerobic","Microaerophilic"))
-# this doesn't include the rows with "Strictly anaerobic" 
+pas4 <- pas3 %>% filter(metabolism %in% c("Aerobic","Anaerobic",
+                                          "Microaerophilic", "Strictly anaerobic"))
 
 issues <- c("Surface of Beaufort, G",
             "Surface rind of Beaufort, G",
