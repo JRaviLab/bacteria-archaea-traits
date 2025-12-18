@@ -23,5 +23,8 @@ rrn <- rrn[,c("tax_id","org_name","rRNA16S_genes","tRNA_genes","reference","ref_
 #Remove any fully duplicate rows
 rrn <- unique(rrn[, names(rrn)])
 
+# Remove rows that lack tRNA_gene and rRNA16S_gene data 
+# 2025-12-18 removes 24 data points
+rrn <- rrn %>% filter(!is.na(rRNA16S_genes) | !is.na(tRNA_genes))
 #Save master data
 write.csv(rrn, "output/prepared_data/rrndb.csv", row.names=FALSE, quote=TRUE)
