@@ -44,7 +44,7 @@ store2 <- store1[store1$species %in% nam$name_txt,]
 dim(store2)
 
 #Only include organisms with both genus and species name 
-store3 <- store2[lengths(strsplit(store2$species, " ")) == 2,]
+store3 <- store2[lengths(strsplit(store2$species, " ")) >= 2,]
 dim(store3)
 
 store4 <- merge(store3, nam[c("tax_id", "name_txt" )], by.x="species", by.y="name_txt", all.x=TRUE, sort=FALSE)
